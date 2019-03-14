@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="css/styles.css">
+	<script src="js/script.js" type="module"></script>
+	<title>Document</title>
+</head>
+
+<body>
+	<noscript>Veel van deze website werkt niet als JavaScript uit staat. <a href="https://enable-javascript.com/nl/" target="_blank">Overweeg om het aan te zetten</a>.</noscript>
+	<form method="POST" action=<%= `/${filter}` %> class="l-offsetleft">
+		<div id="search">
+			<img id="logo" src="images/logo.png" alt="Logo">
+			<div id="input">
+				<button id="clear" type="button" title="Maak zoekbalk leeg">Maak zoekbalk leeg</button>
+				<label for="searchbar" class="accessibility-hidden">Hier kun je zoeken naar items in de OBA catalogus.</label>
+				<input id="searchbar" type="text" placeholder="Zoeken..." autocomplete="off" spellcheck="false" name="q">
+				<button id="filter" type="button" title="Configureer filters">Configureer filters</button>
+			</div>
+			<div id="types">
+				<a href="/all" class=<%= (filter === "all") ? "link-active" : "" %>>Alle media</a>
+				<a href="/book" class=<%= (filter === "book") ? "link-active" : "" %>>Boeken</a>
+				<a href="/video" class=<%= (filter === "video") ? "link-active" : "" %>>Video's</a>
+				<a href="/audio" class=<%= (filter === "audio") ? "link-active" : "" %>>Audio</a>
+				<a href="/photo" class=<%= (filter === "photo") ? "link-active" : "" %>>Foto's</a>
+				<a href="/other" class=<%= (filter === "other") ? "link-active" : "" %>>Anders</a>
+			</div>
+		</div>
+	</form>
+	<div id="autosuggest"></div>
+	<main></main>
+	<aside class="card">
+		<h2>Meer zoals dit...</h2>
+	</aside>
+</body>
+
+</html>

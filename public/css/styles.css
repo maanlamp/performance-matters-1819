@@ -1,0 +1,320 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	text-rendering: optimizeLegibility;
+	outline: none;
+}
+
+body {
+	background-color: #F9F9F9;
+	font-family: "Lato", sans-serif;
+	display: flex;
+	flex-wrap: wrap;
+	overflow-x: hidden;
+}
+
+main {
+	--offsetTop: 1.5rem;
+	flex: 0 1 720px;
+	margin: var(--offsetTop) 0 5rem 186px;
+	transition: margin-top .25s ease-out;
+} #autosuggest.show+main {
+	--offsetTop: 180px;
+} main .itemContainer+.itemContainer {
+	margin-top: .5rem;
+}
+
+button {
+	cursor: pointer;
+	color: transparent;
+}
+
+h2 {
+	color: red;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+form {
+	padding-bottom: 1rem;
+	z-index: 998;
+	position: sticky;
+	top: -85px;
+	width: 100vw;
+	background: linear-gradient(to right, rgba(249,249,249,1) 0%, rgba(255,255,255,0) 10%, rgba(255,255,255,0) 90%, rgba(249,249,249,1) 100%);
+	background-size: cover;
+	backdrop-filter: blur(6px) saturate(.5);
+} #search {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	user-select: none;
+} #search::after {
+	content: "";
+	height: 2.5px;
+	width: 100vw;
+	position: absolute;
+	background-color: rgb(240, 240, 240);
+	left: 0;
+	top: 130px;
+} #search #logo {
+	height: 5rem;
+} #search {
+	padding-top: 1rem;
+} #search #input {
+	display: flex;
+	width: 720px;
+	margin-left: 32px;
+	transition: box-shadow .1s ease-out;
+} #search #input:focus-within {
+	box-shadow: 0 .25rem 1rem rgba(0,0,0,.1);
+} #search input {
+	border: none;
+	padding: 1rem 1rem .9rem 3rem;
+	font: inherit;
+	background: white url("../images/search.png") no-repeat 1rem center;
+	background-size: 1rem;
+	flex: 1 1 calc(100% - 3rem);
+	height: 3rem;
+} #search input::placeholder {
+	color: rgb(169, 169, 169);
+} #search #input #filter {
+	background: white url("../images/filter.png") no-repeat center center;
+	background-size: 1rem;
+	width: 3rem;
+	height: 3rem;
+	border: none;
+	flex: 0 0 3rem;
+} #search #types {
+	flex: 0 0 calc(100% - 142px);
+	margin-left: calc(142px - .5rem);
+} #search #types a {
+	color: rgb(169, 169, 169);
+	padding: 1rem .5rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: color .1s ease-out;
+	mix-blend-mode: color-burn;
+} #search #types a.link-active {
+	text-decoration: underline;
+} #search #types a.link-active,
+	#search #types a:hover,
+	#search #types a:focus {
+	color: black;
+} #search #clear {
+	background: white url("../images/clear.png") no-repeat center center;
+	background-size: 1rem;
+	width: 3rem;
+	height: 3rem;
+	border: none;
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+} #search #clear.show {
+	opacity: 1;
+	pointer-events: all;
+}
+
+#autosuggest {
+	background-color: white;
+	width: 720px;
+	position: absolute;
+	left: 185px;
+	top: 75px;
+	z-index: 999;
+	padding: 0 3rem 1rem 3rem;
+	opacity: 0;
+	border-bottom: 2px solid rgb(240, 240, 240);
+	pointer-events: none;
+	transform: scaleY(0);
+	transform-origin: center top;
+	transition: opacity .2s ease, transform .1s ease-out;
+	filter: blur(1px);
+	height: 230px;
+} #autosuggest.show {
+	transform: scaleY(1);
+	opacity: 1;
+	filter: none;
+	pointer-events: all;
+} #autosuggest.show:empty {
+	height: 230px;
+	background-image:
+		radial-gradient(circle 20px at 24px 26px, rgb(240, 240, 240) 46%, transparent 50%),
+		linear-gradient(100deg,
+			rgba(255, 255, 255, 0),
+			rgba(255, 255, 255, 0.5) 50%,
+			rgba(255, 255, 255, 0) 80%),
+		linear-gradient(rgb(255, 200, 200) 10px, transparent 0),
+		linear-gradient(rgb(240, 240, 240) 10px, transparent 0),
+		linear-gradient(rgb(240, 240, 240) 10px, transparent 0);
+	background-repeat: repeat-y;
+	background-size:
+		100px 80px, /* circle */
+		100px 80px, /* highlight */
+		150px 80px,
+		350px 80px,
+		300px 80px,
+		250px 80px;
+	background-position:
+		0 0, /* circle */
+		0 0, /* highlight */
+		48px 0,
+		48px 20px,
+		48px 40px;
+	animation: loadingSuggestions 1s infinite;
+} #autosuggest .suggestion {
+	position: relative;
+	cursor: pointer;
+} #autosuggest .suggestion>img {
+	position: absolute;
+	width: 30px;
+	left: -38px;
+	top: 7px;
+	height: 45px;
+} #autosuggest .suggestion+.suggestion {
+	margin-top: 1.5rem;
+} @keyframes loadingSuggestions {
+	to {
+		background-position:
+			0 0,
+			100% 0, /* move highlight to right */
+			48px 0,
+			48px 20px,
+			48px 40px;
+	}
+}
+
+.card {
+	background-color: white;
+	border-bottom: 2px solid rgb(240, 240, 240);
+	padding: 1rem;
+} .card>h2 {
+	font-size: 1.5rem;
+} .card>*+* {
+	margin-top: 1rem;
+} .card+.card {
+	margin-top: .5rem;
+} .card:empty {
+	height: 80px;
+	background-image:
+		radial-gradient(circle 20px at 24px 26px, rgb(240, 240, 240) 46%, transparent 50%),
+		linear-gradient(100deg,
+			rgba(255, 255, 255, 0),
+			rgba(255, 255, 255, 0.5) 50%,
+			rgba(255, 255, 255, 0) 80%),
+		linear-gradient(rgb(255, 200, 200) 10px, transparent 0),
+		linear-gradient(rgb(240, 240, 240) 10px, transparent 0),
+		linear-gradient(rgb(240, 240, 240) 10px, transparent 0);
+	background-repeat: repeat-y;
+	background-size:
+		100px 80px, /* circle */
+		100px 80px, /* highlight */
+		150px 80px,
+		350px 80px,
+		300px 80px,
+		250px 80px;
+	background-position:
+		0 15px, /* circle */
+		0 0, /* highlight */
+		48px 15px,
+		48px 35px,
+		48px 55px;
+	animation: loadingSearch 1s infinite;
+} @keyframes loadingSearch {
+	to {
+		background-position:
+			0 15px,
+			100% 0, /* move highlight to right */
+			48px 15px,
+			48px 35px,
+			48px 55px;
+	}
+}
+
+.fadein {
+	opacity: 0;
+	transform: translateY(-5px);
+	animation: fadein .5s ease-out forwards;
+} @keyframes fadein {
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.fadeout {
+	opacity: 1;
+	transform: none;
+	animation: fadeout .5s ease-out forwards;
+} @keyframes fadeout {
+	to {
+		opacity: 0;
+		transform: translateY(-5px);
+	}
+}
+
+.noContent {
+	color: red;
+	height: 3rem;
+	padding-left: 3rem;
+	background: url("../images/noContent.png") no-repeat .75rem center;
+	background-size: 1.5rem;
+	display: flex;
+	align-items: center;
+} #autosuggest.show:not(:empty)+main .noContent {
+	display: none;
+}
+
+.l-offsetleft {
+	padding-left: 46px;
+}
+
+aside {
+	flex: 0 1 420px;
+	margin: 1.5rem 0 0 1rem;
+	max-height: 270px;
+	transition: all .5s ease-out;
+	opacity: 0;
+	transition-delay: 2s;
+	position: sticky;
+	transform: translateY(-10px);
+	top: 70px;
+	background: white url(../images/related.png) no-repeat left bottom 1rem;
+	background-size: 110%;
+	display: none;
+} aside.show {
+	opacity: 1;
+	transform: none;
+	display: inline-block;
+}
+
+@media only screen and (max-width: 1350px) {
+	aside {
+		display: none;
+	}
+}
+
+noscript {
+	background: rgb(236, 46, 78);
+	color: white;
+	display: block;
+	width: 100vw;
+	text-align: center;
+	padding: .5rem 0;
+} noscript a {
+	color: currentColor;
+}
+
+.accessibility-hidden {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
