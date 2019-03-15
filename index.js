@@ -1,17 +1,26 @@
 const express = require("express");
 const app = express();
 const API = require("oba-wrapper/node");
+const encodeErrorHTML = require("escape-html");
 const port = 1337;
 
 const api = new API({
 	key: "1e19898c87464e239192c8bfe422f280"
 });
 
-// (async()=>{
-// 	(await api.createStream("search/test{1}"))
-// 		.pipe(res => console.log("results:", res))
-// 		.catch(console.error);
-// })();
+function optionalChain (source, rest, alternative) {
+	//support obj[property] notation in rest
+	const chain = rest.split(/\./);
+	let obj = source[chain.shift()];
+	try {
+		for (const property of chain) obj = obj[property];
+		return (obj !== undefined)
+			? obj
+			: alternative;
+	} catch {
+		return alternative;
+	}
+}
 
 app
 	.set("view engine", "ejs")
@@ -26,24 +35,23 @@ app
 		res.render("home.ejs", {
 			filter: req.params.filter
 		})})
-	.post("/:filter", (req, res) => {
-		const items = [
-			{
-				src: "https://cover.biblion.nl/coverlist.dll?doctype=morebutton&bibliotheek=oba&style=0&ppn=363086188&isbn=9789045207933&lid=&aut=&ti=&size=70",
-				title: "De Test",
-				description: "Malencia (17, ik-figuur) is uitgekozen om de jaarlijkse test te doen. Maar de test blijkt een stuk zwaarder dan ze had gedacht. Al snel vallen de eerste doden. Vanaf ca. 15 jaar."
-			},
-			{
-				src: "https://cover.biblion.nl/coverlist.dll?doctype=morebutton&bibliotheek=oba&style=0&ppn=363086188&isbn=9789045207933&lid=&aut=&ti=&size=70",
-				title: "De Test",
-				description: "Malencia (17, ik-figuur) is uitgekozen om de jaarlijkse test te doen. Maar de test blijkt een stuk zwaarder dan ze had gedacht. Al snel vallen de eerste doden. Vanaf ca. 15 jaar."
-			},
-			{
-				src: "https://cover.biblion.nl/coverlist.dll?doctype=morebutton&bibliotheek=oba&style=0&ppn=363086188&isbn=9789045207933&lid=&aut=&ti=&size=70",
-				title: "De Test",
-				description: "Malencia (17, ik-figuur) is uitgekozen om de jaarlijkse test te doen. Maar de test blijkt een stuk zwaarder dan ze had gedacht. Al snel vallen de eerste doden. Vanaf ca. 15 jaar."
-			}
-		];
+	.post("/:filter", async (req, res) => {
+		const items = await api.createStream("search/test{15}")
+			.then(stream => stream.all())
+			.then(results => results.map(result => {
+				return result.map(item => ({
+					src: item.coverimages[0].coverimage[0]._,
+					title: item.titles[0]["short-title"][0]._ || "Geen titel.",
+					description: optionalChain(item, "summaries.0.summary.0._", "Geen beschrijving.")
+				}))}))
+			.then(arrayOfArrays => arrayOfArrays.flat())
+			.catch(err => res.render("search.ejs", {
+				filter: req.params.filter,
+				items: [{
+					src: "images/noContent.png",
+					title: "Error!",
+					description: `<pre>${encodeErrorHTML(err.stack || error)}</pre>`
+				}]}));
 
 		res.render("search.ejs", {
 			filter: req.params.filter,

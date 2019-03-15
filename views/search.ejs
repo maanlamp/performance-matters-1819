@@ -35,9 +35,9 @@
 	<main>
 		<% items.forEach((item, i) => { %>
 			<div class="card fadein" style=<%=`animation-delay: ${150*i}ms`%>>
-				<img src=<%= item.src %> alt="Voorkant van het boek <%= item.title %>">
+				<img src="<%= item.src %>" alt="Voorkant van het boek <%= item.title %>">
 				<h2><%= item.title %></h2>
-				<p><%= item.description %></p>
+				<p><%- item.description %></p>
 			</div>
 		<% }); %>
 	</main>
