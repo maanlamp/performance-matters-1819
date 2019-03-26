@@ -1,6 +1,8 @@
 import { API } from "../oba-wrapper/js/index.js";
 import { clearElement, repeat } from "./helpers.js";
 import { resultsToDivs, render } from "./render.js";
+import { loadFont, attachFontToDocument, broadcastFontLoaded } from "./font.js";
+import replaceMinifiedImages from "./image.js";
 
 const api = new API({
 	key: "1e19898c87464e239192c8bfe422f280"
@@ -163,10 +165,18 @@ function noContent (container) {
 	}; //Shitty way of supressing "no property pipe/all on undefined" if caught
 }
 
+void function lazyLoadFonts () {
+	loadFont("https://fonts.googleapis.com/css?family=Lato:400,700")
+		.then(attachFontToDocument)
+		.then(() => broadcastFontLoaded("Lato"));
+}();
+
+setTimeout(replaceMinifiedImages, 0); //next tick to stop page-loader-spinner-boy
+
 //--** Should have **--//
 //Other media types have other place for their image //THE DATA IS TOO MESSY :(((
 
-//--** Could have **--
+//--** Could have **--//
 //Make filtering work
 
 //--** Would have **--//

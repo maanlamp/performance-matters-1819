@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+const compression = require("compression");
 const API = require("oba-wrapper/node");
 const encodeErrorHTML = require("escape-html");
 const port = 1337;
+const year = 31557600;
 
 const api = new API({
 	key: "1e19898c87464e239192c8bfe422f280"
@@ -24,7 +26,8 @@ function optionalChain (source, rest, alternative) {
 
 app
 	.set("view engine", "ejs")
-	.use(express.static("public"));
+	.use(compression())
+	.use(express.static("public", {maxAge: year})); //Last middleware
 
 app
 	.get("/", (req, res) => {
@@ -50,7 +53,7 @@ app
 				items: [{
 					src: "images/noContent.png",
 					title: "Error!",
-					description: `<pre>${encodeErrorHTML(err.stack || error)}</pre>`
+					description: `<pre>${encodeErrorHTML(err.stack || err)}</pre>`
 				}]}));
 
 		res.render("search.ejs", {
