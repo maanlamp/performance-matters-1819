@@ -4,6 +4,7 @@
   "description": "idk lol",
   "main": "index.js",
   "dependencies": {
+    "compression": "^1.7.4",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "oba-wrapper": "^1.0.0"
