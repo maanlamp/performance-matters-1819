@@ -5,6 +5,7 @@ const API = require("oba-wrapper/node");
 const encodeErrorHTML = require("escape-html");
 const port = process.env.PORT || 1337;
 const year = 31557600;
+const fs = require("fs");
 
 const api = new API({
 	key: "1e19898c87464e239192c8bfe422f280"
@@ -34,10 +35,10 @@ app
 		res.render("home.ejs", {
 			filter: "home"
 		})})
-	.get("/:filter", (req, res) => {
+	.get("/:filter", (req, res) =>
 		res.render("home.ejs", {
 			filter: req.params.filter
-		})})
+		}))
 	.post("/:filter", async (req, res) => {
 		const items = await api.createStream("search/test{15}")
 			.then(stream => stream.all())

@@ -4,6 +4,12 @@ import { resultsToDivs, render } from "./render.js";
 import { loadFont, attachFontToDocument, broadcastFontLoaded } from "./font.js";
 import replaceMinifiedImages from "./image.js";
 
+navigator.serviceWorker
+	.register("/sw.js", {
+		scope: "/"})
+	.then(() => console.log(`SW: Registered!`))
+	.catch(err => console.error(`Could not register ServiceWorker: ${err}`));
+
 const api = new API({
 	key: "1e19898c87464e239192c8bfe422f280"
 });
