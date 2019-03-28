@@ -1,5 +1,9 @@
 # Performance matters
 
+## Live Demo
+![Een geanimeerd GIF-plaatje dat de werking van de app illustreert](autosuggest.gif)
+[Check hier de live demo!](https://performace-matters-maanlamp.herokuapp.com/)
+
 ## Week 1
 ### Getting started
 ```shell
