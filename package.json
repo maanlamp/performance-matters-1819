@@ -1,0 +1,25 @@
+{
+  "name": "performance-matters-1819",
+  "version": "1.0.0",
+  "description": "idk lol",
+  "main": "index.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "oba-wrapper": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maanlamp/performance-matters-1819.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maanlamp/performance-matters-1819/issues"
+  },
+  "homepage": "https://github.com/maanlamp/performance-matters-1819#readme"
+}

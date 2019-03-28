@@ -3,7 +3,7 @@ const app = express();
 const compression = require("compression");
 const API = require("oba-wrapper/node");
 const encodeErrorHTML = require("escape-html");
-const port = 1337;
+const port = process.env.PORT || 1337;
 const year = 31557600;
 
 const api = new API({
@@ -55,12 +55,7 @@ app
 					title: "Error!",
 					description: `<pre>${encodeErrorHTML(err.stack || err)}</pre>`
 				}]}));
-
 		res.render("search.ejs", {
 			filter: req.params.filter,
-			items
-		})});
-
-app.listen(port, () => {
-	console.log(`Running on port ${port}.`);
-});
+			items})})
+	.listen(port, () => console.log(`Running on port ${port}.`));
